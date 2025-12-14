@@ -5,11 +5,11 @@ from mcp.server import FastMCP
 
 import spotify_api
 from config import setup_logging, validate_environment
+from helpers.auth_helpers import normalize_redirect_uri
 from tools.playback import register_playback_tools
 from tools.search import register_search_tools
 from tools.playlists import register_playlist_tools
 from tools.devices import register_device_tools
-from utils import normalize_redirect_uri
 
 # Setup logging
 logger = setup_logging()

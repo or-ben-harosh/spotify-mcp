@@ -8,8 +8,8 @@ import spotipy
 from dotenv import load_dotenv
 from spotipy.oauth2 import SpotifyOAuth
 
-from helpers import parsers, auth_helpers, device_helpers
-from utils import normalize_redirect_uri
+from helpers import parsers, device_helpers, auth_helpers
+from helpers.auth_helpers import normalize_redirect_uri
 
 load_dotenv()
 

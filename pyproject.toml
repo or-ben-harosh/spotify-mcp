@@ -11,8 +11,8 @@ dependencies = [
 ]
 
 [[project.authors]]
-name = "Varun Srivastava"
-email = "varun.neal@berkeley.edu"
+name = "Or Ben Harosh"
+email = "orbenharoshgit@gmail.com"
 
 [build-system]
 requires = ["hatchling"]
