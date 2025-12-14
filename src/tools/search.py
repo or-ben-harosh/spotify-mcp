@@ -1,7 +1,7 @@
 """Search and queue tools for Spotify MCP server."""
 
 import logging
-from helpers.error_handler import handle_spotify_errors
+from src.helpers.error_handler import handle_spotify_errors
 
 logger = logging.getLogger(__name__)
 
