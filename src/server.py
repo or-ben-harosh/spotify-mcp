@@ -3,13 +3,13 @@
 import sys
 from mcp.server import FastMCP
 
-import spotify_api
-from config import setup_logging, validate_environment
-from helpers.auth_helpers import normalize_redirect_uri
-from tools.playback import register_playback_tools
-from tools.search import register_search_tools
-from tools.playlists import register_playlist_tools
-from tools.devices import register_device_tools
+from src.helpers.auth_helpers import normalize_redirect_uri
+from src.api import spotify_api
+from src.config.config import validate_environment, setup_logging
+from src.tools.playback import register_playback_tools
+from src.tools.search import register_search_tools
+from src.tools.playlists import register_playlist_tools
+from src.tools.devices import register_device_tools
 
 # Setup logging
 logger = setup_logging()
@@ -69,3 +69,6 @@ def main():
     except Exception as e:
         logger.error(f"Server error: {e}", exc_info=True)
         sys.exit(1)
+
+if __name__ == "__main__":
+    main()

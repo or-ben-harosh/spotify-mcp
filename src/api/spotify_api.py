@@ -1,4 +1,4 @@
-"""Simplified Spotify API client."""
+"""Spotify API client."""
 
 import logging
 import os
@@ -8,14 +8,18 @@ import spotipy
 from dotenv import load_dotenv
 from spotipy.oauth2 import SpotifyOAuth
 
-from helpers import parsers, device_helpers, auth_helpers
-from helpers.auth_helpers import normalize_redirect_uri
+from src.helpers import parsers, device_helpers, auth_helpers
+from src.helpers.auth_helpers import normalize_redirect_uri
+
 
 load_dotenv()
 
 CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
 CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
 REDIRECT_URI = normalize_redirect_uri(os.getenv("SPOTIFY_REDIRECT_URI"))
+
+# Define a persistent cache path
+CACHE_PATH = os.path.join(os.path.expanduser("~"), ".spotify_mcp_cache")
 
 SCOPES = [
     "user-read-currently-playing",
@@ -46,11 +50,27 @@ class Client:
                     scope=scope,
                     client_id=CLIENT_ID,
                     client_secret=CLIENT_SECRET,
-                    redirect_uri=REDIRECT_URI
+                    redirect_uri=REDIRECT_URI,
+                    cache_path=CACHE_PATH,
+                    open_browser=True  # Allow browser to open ONLY on first initialization
                 )
             )
             self.auth_manager = self.sp.auth_manager
             self.cache_handler = self.auth_manager.cache_handler
+
+            # Try to get token on initialization (will open browser if needed)
+            token_info = self.auth_manager.get_cached_token()
+            if token_info is None:
+                self.logger.info("No cached token found. Initiating authentication...")
+                # This will open browser for initial authentication
+                token_info = self.auth_manager.get_access_token(as_dict=True)
+                if token_info:
+                    self.logger.info("Authentication successful! Token cached.")
+                else:
+                    raise RuntimeError("Authentication failed")
+            else:
+                self.logger.info("Using cached authentication token")
+
         except Exception as e:
             self.logger.error(f"Failed to initialize Spotify client: {e}")
             raise
@@ -78,7 +98,7 @@ class Client:
     def search(self, query: str, qtype: str = 'track', limit=10, device=None):
         """
         Search for items on Spotify.
-        
+
         Args:
             query: Search query term
             qtype: Item types to return ('track', 'album', 'artist', 'playlist' or comma-separated)
@@ -86,22 +106,22 @@ class Client:
         """
         if self.username is None:
             self.set_username()
-        
+
         results = self.sp.search(q=query, limit=limit, type=qtype)
         if not results:
             raise ValueError("No search results found.")
-        
+
         return parsers.parse_search_results(results, qtype, self.username)
 
     def get_info(self, item_uri: str) -> dict:
         """
         Get detailed information about a Spotify item.
-        
+
         Args:
             item_uri: URI like 'spotify:track:xxxxx' or 'spotify:album:xxxxx'
         """
         _, qtype, item_id = item_uri.split(":")
-        
+
         if qtype == 'track':
             return parsers.parse_track(self.sp.track(item_id), detailed=True)
         elif qtype == 'album':
@@ -111,7 +131,7 @@ class Client:
             albums = self.sp.artist_albums(item_id)
             top_tracks = self.sp.artist_top_tracks(item_id)['tracks']
             parsed_info = parsers.parse_search_results(
-                {'albums': albums, 'tracks': {'items': top_tracks}}, 
+                {'albums': albums, 'tracks': {'items': top_tracks}},
                 qtype="album,track"
             )
             artist_info.update({
@@ -153,9 +173,9 @@ class Client:
     def start_playback(self, spotify_uri=None, device=None):
         """
         Start playback of a Spotify URI.
-        
+
         Args:
-            spotify_uri: URI to play ('spotify:track:xxxxx' or 'spotify:album:xxxxx'). 
+            spotify_uri: URI to play ('spotify:track:xxxxx' or 'spotify:album:xxxxx').
                         If None, resumes current playback.
             device: Device to play on (will be auto-selected if not provided)
         """
@@ -220,7 +240,7 @@ class Client:
         if not playlists:
             raise ValueError("No playlists found.")
         return [parsers.parse_playlist(p, self.username) for p in playlists['items']]
-    
+
     @auth_helpers.ensure_username
     def get_playlist_tracks(self, playlist_id: str, limit=50) -> List[Dict]:
         """Get tracks from a playlist."""
@@ -228,13 +248,13 @@ class Client:
         if not playlist:
             raise ValueError("No playlist found.")
         return parsers.parse_tracks(playlist['tracks']['items'])
-    
+
     @auth_helpers.ensure_username
     def add_tracks_to_playlist(self, playlist_id: str, track_ids: List[str], position: Optional[int] = None):
         """Add tracks to a playlist."""
         if not playlist_id or not track_ids:
             raise ValueError("playlist_id and track_ids are required.")
-        
+
         self.sp.playlist_add_items(playlist_id, track_ids, position=position)
         self.logger.info(f"Added {len(track_ids)} tracks to playlist {playlist_id}")
 
@@ -243,7 +263,7 @@ class Client:
         """Remove tracks from a playlist."""
         if not playlist_id or not track_ids:
             raise ValueError("playlist_id and track_ids are required.")
-        
+
         self.sp.playlist_remove_all_occurrences_of_items(playlist_id, track_ids)
         self.logger.info(f"Removed {len(track_ids)} tracks from playlist {playlist_id}")
 
@@ -252,7 +272,7 @@ class Client:
         """Create a new playlist."""
         if not name:
             raise ValueError("Playlist name is required.")
-        
+
         user = self.sp.current_user()
         playlist = self.sp.user_playlist_create(
             user=user['id'],
@@ -268,7 +288,7 @@ class Client:
         """Change playlist details."""
         if not playlist_id:
             raise ValueError("playlist_id is required.")
-        
+
         self.sp.playlist_change_details(playlist_id, name=name, description=description)
         self.logger.info(f"Updated playlist details for {playlist_id}")
 
