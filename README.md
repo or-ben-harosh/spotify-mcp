@@ -195,7 +195,7 @@ mcp dev server.py
 - [Spotify Web API Reference](https://developer.spotify.com/documentation/web-api)
 - [Spotipy Documentation](https://spotipy.readthedocs.io/)
 
----****
+---
 
 <div align="center">
 
