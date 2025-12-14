@@ -111,6 +111,45 @@ npx @modelcontextprotocol/inspector uv --directory /path/to/spotify-mcp run spot
 
 Upon launching, the Inspector will display a URL that you can access in your browser to begin debugging.
 
+## Development
+
+### Running with MCP Dev
+
+For development, you can use the `mcp dev` command to run the server with hot reloading:
+
+```bash
+# From the project root directory
+cd /path/to/spotify-mcp
+mcp dev server.py
+```
+
+Make sure you have your environment variables set in a `.env` file:
+
+```bash
+SPOTIFY_CLIENT_ID=your_client_id
+SPOTIFY_CLIENT_SECRET=your_client_secret
+SPOTIFY_REDIRECT_URI=http://127.0.0.1:8080/callback
+```
+
+### Project Structure
+
+```
+spotify-mcp/
+├── server.py                    # Entry point for mcp dev
+├── src/
+│   └── spotify_mcp/
+│       ├── __init__.py         # Package initialization
+│       ├── server.py           # Main server implementation
+│       ├── spotify_api.py      # Spotify API client
+│       ├── config.py           # Configuration and logging
+│       ├── utils.py            # Utility functions
+│       └── tools/              # Tool implementations
+│           ├── playback.py
+│           ├── search.py
+│           ├── playlists.py
+│           └── devices.py
+```
+
 ## TODO
 
 Unfortunately, a bunch of cool features have [now been deprecated](https://techcrunch.com/2024/11/27/spotify-cuts-developer-access-to-several-of-its-recommendation-features/)
