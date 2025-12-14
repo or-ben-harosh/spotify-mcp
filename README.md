@@ -47,20 +47,20 @@ graph TB
 <td width="50%">
 
 ### Playback Control
-- ▶️ Play, pause, and resume
-- ⏭️ Skip forward/backward
-- 🔀 Shuffle and repeat modes
-- ⏱️ Seek to specific timestamps
-- 🔊 Volume control
+- Play, pause, and resume
+- Skip forward/backward
+- Shuffle and repeat modes
+- Seek to specific timestamps
+- Volume control
 
 </td>
 <td width="50%">
 
 ### Search & Discovery
-- 🎵 Search tracks, albums, artists
-- 📋 Find and browse playlists
-- ➕ Add songs to queue
-- 👁️ View current queue
+- Search tracks, albums, artists
+- Find and browse playlists
+- Add songs to queue
+- View current queue
 
 </td>
 </tr>
@@ -68,18 +68,18 @@ graph TB
 <td width="50%">
 
 ### Playlist Management
-- ✏️ Create new playlists
-- ➕ Add/remove tracks
-- 🔄 Update playlist details
-- 📊 Browse your library
+- Create new playlists
+- Add/remove tracks
+- Update playlist details
+- Browse your library
 
 </td>
 <td width="50%">
 
 ### Device Management
-- 📱 List available devices
-- 🔄 Switch playback between devices
-- 💻 Control multi-device setups
+- List available devices
+- Switch playback between devices
+- Control multi-device setups
 
 </td>
 </tr>
@@ -116,25 +116,6 @@ Before you begin, ensure you have:
 > ⚠️ **Important**: You must use `http://` (not `https://`) and the explicit loopback address `127.0.0.1` (not `localhost`). See [Spotify's Redirect URI documentation](https://developer.spotify.com/documentation/web-api/concepts/redirect_uri) for details.
 
 #### Step 2: Configure Your MCP Client
-
-Locate and edit your MCP configuration file:
-
-**macOS:**
-```bash
-~/Library/Application Support/Claude/claude_desktop_config.json
-```
-
-**Windows:**
-```bash
-%APPDATA%\Claude\claude_desktop_config.json
-```
-
-**Linux:**
-```bash
-~/.config/Claude/claude_desktop_config.json
-```
-
-Add the following configuration:
 
 ```json
 {
@@ -207,125 +188,18 @@ cd src
 mcp dev server.py
 ```
 
-This will start a local development server where you can:
-- View all available tools
-- Test tool invocations
-- Inspect request/response payloads
-- Debug OAuth flows
-
-## Troubleshooting
-
-### Common Issues
-
-<details>
-<summary><strong>OAuth redirect not working / "Invalid redirect URI" error</strong></summary>
-
-**Solution:**
-- Ensure the redirect URI in your Spotify Dashboard is exactly: `http://127.0.0.1:8080/callback`
-- Verify your config file uses the same exact URI
-- Use `127.0.0.1`, not `localhost`
-- Use `http://`, not `https://`
-- Restart your MCP client after making changes
-
-</details>
-
-<details>
-<summary><strong>"Premium required" or "Playback restricted" error</strong></summary>
-
-**Solution:**
-- Spotify's Web API requires a Premium subscription for playback control
-- Free accounts can search and browse but cannot control playback
-- Upgrade to Spotify Premium or use read-only features
-
-</details>
-
-<details>
-<summary><strong>Server not loading or tools not appearing</strong></summary>
-
-**Solution:**
-- Ensure `uv` is version 0.54 or higher: `uv --version`
-- Update `uv`: `pip install --upgrade uv`
-- Check that Python 3.12+ is installed: `python3 --version`
-- Completely restart your MCP client (quit and relaunch)
-- Check logs for specific error messages (see below)
-
-</details>
-
-<details>
-<summary><strong>Permission errors (local development)</strong></summary>
-
-**Solution:**
-```bash
-chmod -R 755 /path/to/spotify-mcp
-```
-
-</details>
-
-<details>
-<summary><strong>"No active device" error</strong></summary>
-
-**Solution:**
-- Open Spotify on any device (phone, desktop, web player)
-- Start playing any song to activate the device
-- Use the "List Devices" tool to verify available devices
-- Transfer playback to your desired device if needed
-
-</details>
-
-### Getting Logs
-
-Logs can help diagnose issues. Find them here:
-
-| Platform    | Log Location             |
-| ----------- | ------------------------ |
-| **macOS**   | `~/Library/Logs/Claude/` |
-| **Windows** | `%APPDATA%\Claude\logs\` |
-| **Linux**   | `~/.config/Claude/logs/` |
-
-For more details, see the [MCP Logging Guide](https://modelcontextprotocol.io/quickstart/user#getting-logs-from-claude-for-desktop).
-
-### Still Having Issues?
-
-1. Check the [GitHub Issues](https://github.com/or-ben-harosh/spotify-mcp/issues) page
-2. Search for similar problems or create a new issue
-3. Include:
-   - Your OS and MCP client version
-   - Relevant log excerpts
-   - Steps to reproduce the issue
-
 ## Resources
 
 - [Model Context Protocol Documentation](https://modelcontextprotocol.io/)
+- [FastMCP Framework](https://github.com/jlowin/fastmcp)
 - [Spotify Web API Reference](https://developer.spotify.com/documentation/web-api)
 - [Spotipy Documentation](https://spotipy.readthedocs.io/)
-- [FastMCP Framework](https://github.com/jlowin/fastmcp)
 
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- Built with [FastMCP](https://github.com/jlowin/fastmcp)
-- Powered by [Spotipy](https://github.com/spotipy-dev/spotipy)
-- Inspired by the Model Context Protocol community
-
----
+---****
 
 <div align="center">
 
 **Made with ❤️ for the MCP community**
 
 [⭐ Star this repo](https://github.com/or-ben-harosh/spotify-mcp) if you find it useful!
-
 </div>
