@@ -15,7 +15,7 @@ load_dotenv()
 
 CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
 CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
-REDIRECT_URI = normalize_redirect_uri(os.getenv("SPOTIFY_CLIENT_REDIRECT_URI"))
+REDIRECT_URI = normalize_redirect_uri(os.getenv("SPOTIFY_REDIRECT_URI"))
 
 SCOPES = [
     "user-read-currently-playing",

@@ -17,7 +17,7 @@ logger = setup_logging()
 # Initialize FastMCP server (early so it can be imported)
 mcp = FastMCP("spotify-mcp")
 
-# Initialize Spotify client and register tools
+# Initialize Spotify client and register tools at module level
 def _initialize_server():
     """Initialize the Spotify client and register tools."""
     # Validate environment on startup
@@ -44,16 +44,20 @@ def _initialize_server():
         register_search_tools(mcp, spotify_client)
         register_playlist_tools(mcp, spotify_client)
         register_device_tools(mcp, spotify_client)
+        logger.info("All tools registered successfully")
 
     return spotify_client
+
+
+# Initialize at module level for mcp dev
+spotify_client = _initialize_server()
 
 
 def main():
     """Main entry point for the Spotify MCP Server."""
     logger.info("Starting Spotify MCP Server")
 
-    # Initialize the server and register tools
-    spotify_client = _initialize_server()
+    # Check if initialization was successful
     if not spotify_client:
         logger.error("Failed to initialize Spotify client. Exiting.")
         sys.exit(1)

@@ -2,7 +2,7 @@
 
 import logging
 from typing import List, Optional
-from src.helpers.error_handler import handle_spotify_errors
+from helpers.error_handler import handle_spotify_errors
 
 logger = logging.getLogger(__name__)
 
