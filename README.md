@@ -9,8 +9,6 @@
 
 **Control Spotify directly from Claude and other MCP-enabled clients using the power of [Spotipy](https://github.com/spotipy-dev/spotipy/tree/2.24.0)**
 
-[Features](#features) • [Quick Start](#quick-start) • [Installation](#installation) • [Development](#development) • [Troubleshooting](#troubleshooting)
-
 </div>
 
 ---
